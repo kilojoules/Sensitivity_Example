@@ -1,0 +1,39 @@
+# DAKOTA/Python linked interface demonstration
+#  * Requires DAKOTA compiled with and linked against Python
+#  * Exercise the Python interface using list or numpy
+#  * If DAKOTA found numpy it will be used; there's no user toggle for
+#    this currently
+environment
+    tabular_data
+    tabular_data_file "dakota_tabular.dat"
+
+
+method,						
+    polynomial_chaos
+      quadrature_order 15
+      p_refinement uniform
+      max_refinement_iterations 2
+      variance_based_decomp
+
+variables,					
+         normal_uncertain 2
+          means 0 0
+          std_deviations 1 1
+	  descriptors      'x1' 'x2'
+
+interface,						
+        fork
+          asynchronous evaluation_concurrency 36
+          analysis_drivers = 'pross.py'
+          work_directory	
+	  #deactivate evaluation_cache restart_file
+	  parameters_file = 'params.in'
+	  results_file = 'results.out'
+	#python
+	#  analysis_drivers = 'ex:evalu'	#0,#2
+
+responses,				
+	response_functions 1
+	no_gradients		
+	no_hessians
+
